@@ -29,3 +29,7 @@ lc = LRUCache(maxSize, maxAgeMillis, elasticity);
 lc.put('somekey', 'somevalue');
 print 'val : %s' % (lc.get('somekey'));
 
+
+
+*mpycache* was written by someone who has written a fair bit of C/C++/Java/Python code (enterprise grade and in production) and *does* understand that semicolons are not needed at the end of every statement in python. You can either go all snooty pythonista on this non-issue or just take mpycache for a spin. :)
+
