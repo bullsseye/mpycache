@@ -27,8 +27,8 @@
 #
 #   Release History:
 #
-#	   v 0.0.1 - initial release
-#	   v 0.1.1 - fixed maxAge > 0 case return value bug and added versioning methods
+#	   v 1.0.0 - initial release
+#	   v 1.1.0 - fixed maxAge > 0 case return value bug and added versioning methods
 #
 #
 import os;
@@ -47,13 +47,13 @@ class LRUCache (object):
 	DEBUG_DUMP_ENABLED = False;
 	@classmethod
 	def getVersionMajor(cls):
-		return 0;
+		return 1;
 	@classmethod
 	def getVersionMinor(cls):
 		return 1;
 	@classmethod
 	def getVersionRelease(cls):
-		return 1;
+		return 0;
 	@classmethod
 	def getVersionTag(cls):
 		return "maxAge fix";
