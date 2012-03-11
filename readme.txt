@@ -3,8 +3,8 @@
 #   mpycache - a LRU Cache implementation in python
 #   author: Saurav Mohapatra (mohaps@gmail.com)
 #   website: http://code.google.com/p/mpycache
-#   version: 1.0.0
-#   date: 01/01/2010
+#   version: 1.1.0
+#   date: 03/10/2012
 #   license: Apache License 2.0
 #   (http://www.apache.org/licenses/LICENSE-2.0.html)
 # ------------------------------------------------------------------------------------
