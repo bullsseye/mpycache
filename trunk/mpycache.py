@@ -24,6 +24,13 @@
 #   limitations under the License.
 #
 
+#
+#   Release History:
+#
+#	   v 0.0.1 - initial release
+#	   v 0.1.1 - fixed maxAge > 0 case return value bug and added versioning methods
+#
+#
 import os;
 import sys;
 import time;
@@ -38,6 +45,21 @@ NOT_FOUND = _NotFound();
 
 class LRUCache (object):
 	DEBUG_DUMP_ENABLED = False;
+	@classmethod
+	def getVersionMajor(cls):
+		return 0;
+	@classmethod
+	def getVersionMinor(cls):
+		return 1;
+	@classmethod
+	def getVersionRelease(cls):
+		return 1;
+	@classmethod
+	def getVersionTag(cls):
+		return "maxAge fix";
+	@classmethod
+	def getVersionDetails(cls):
+		return "v %d.%d.%d (%s)" % (cls.getVersionMajor(), cls.getVersionMinor(), cls.getVersionRelease(), cls.getVersionTag());
 	@classmethod
 	def currentTimeMicros(cls):
 		return long(time.time() * 1000.0 * 1000.0);
@@ -67,13 +89,16 @@ class LRUCache (object):
 		if ret == NOT_FOUND:
 			return value;
 		# check if value is within acceptable age
-		elif not self.maxAge == 0:
+		elif not self.maxAge > 0:
 			ts = self.timeStampTable[key];
 			age = LRUCache.currentTimeMicros() - ts;
 		
 			if age > self.maxAge:
 				self.erase(key);
 				return value;
+			else:
+				self._freshen(key);
+				return ret;
 		# we found the key in cache return it
 		else:
 			self._freshen(key);
@@ -112,8 +137,14 @@ class LRUCache (object):
 		if self.maxSize == 0:
 			pass;
 		elif self.size()> (self.maxSize + self.elasticity):
-			print 'size [%d] is greater than [%d]. pruning...' % (self.size(), self.maxSize + self.elasticity);
+			if LRUCache.DEBUG_DUMP_ENABLED:
+				print 'size [%d] is greater than [%d]. pruning...' % (self.size(), self.maxSize + self.elasticity);
 			toDel = self.size() - self.maxSize;
+			#
+			# TODO: need to improve this to some sort of constant time operation
+			# mpycache was ported from a C++ implementation which leveraged
+			# std::map<k,v> storing the keys sorted in order
+			#
 			timeStamps = sorted(self.keyTable.keys());
 			timeStamps = timeStamps[0:toDel];
 			for ts in timeStamps:
@@ -150,7 +181,14 @@ class LRUCache (object):
 			out.write('\n');
 # sample usage
 if __name__ == '__main__':
+	# Turning on debug dump for detailed state dumps
+	LRUCache.DEBUG_DUMP_ENABLED = True;
+
+	print '>> Testing MPyCache ',LRUCache.getVersionDetails();
+
+	# the lru cache
 	lc = LRUCache(3,0.300,0);
+	
 	print 'initialized cache : '+str(lc);
 	for i in range(0,10):
 		lc.put('key'+str(i),'val'+str(i));
@@ -159,4 +197,5 @@ if __name__ == '__main__':
 		lc.put('key2','val2');
 
 	print lc.get('key8');
+	# let's dump the state of the cache
 	lc.dumpState();
