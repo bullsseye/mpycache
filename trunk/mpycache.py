@@ -89,7 +89,7 @@ class LRUCache (object):
 		if ret == NOT_FOUND:
 			return value;
 		# check if value is within acceptable age
-		elif not self.maxAge > 0:
+		elif self.maxAge > 0:
 			ts = self.timeStampTable[key];
 			age = LRUCache.currentTimeMicros() - ts;
 		
